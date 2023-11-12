@@ -19,6 +19,7 @@ git clone https://github.com/emilian-klein/weather-app.git
     "api_key": "your_openweather_api_key"
 }
 ```
+Replace "your_openweather_api_key" with your actual OpenWeather API key.
 4. Install dependencies:
 ```
 pip install -r requirements.txt
