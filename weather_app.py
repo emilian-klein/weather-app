@@ -1,129 +1,136 @@
 import tkinter as tk
-# import requests, json
-# from tkinter import messagebox
-# from show_on_map import *
+from tkinter import messagebox
+import requests
+import json
+import folium
+import webbrowser
+import os
 
 
 class WeatherApp(tk.Tk):
     def __init__(self):
+        """
+        Initialize the WeatherApp Tkinter application.
+
+        Sets up the window properties, font styles, and initializes attributes.
+        """
         super().__init__()
         self.title("Weather App")
         self.iconbitmap("images/icon.ico")
-        self.geometry("300x235")
+        self.geometry("400x280")
         self.resizable(False, False)
-        self.n_font_style = ("Calibri", "9", "normal")
-        self.b_font_style = ("Calibri", "9", "bold")
+        self.n_font_style = ("Bahnschrift", "11", "normal")
+        self.b_font_style = ("Bahnschrift", "11", "bold")
+        self.configuration = None
+        self.api_url = "https://api.openweathermap.org/data/2.5/weather?q={location_name}&units=metric&appid={api_key}"
 
-        self.city_label = tk.Label(self, text="Location: ", bg="deepskyblue3", font=self.n_font_style)
-        self.longitude_label = tk.Label(self, text="Longitude: ", font=self.n_font_style)
-        self.latitude_label = tk.Label(self, text="Latitude: ", font=self.n_font_style)
-        self.temperature_label = tk.Label(self, text="Temperature: ", font=self.n_font_style)
-        self.pressure_label = tk.Label(self, text="Pressure: ",  font=self.n_font_style)
-        self.humidity_label = tk.Label(self, text="Humidity: ", font=self.n_font_style)
+        self.location_label = tk.Label(self, text="Location: ", bg="steelblue3", font=self.b_font_style)
+        self.longitude_label = tk.Label(self, text="Longitude: ", font=self.b_font_style)
+        self.latitude_label = tk.Label(self, text="Latitude: ", font=self.b_font_style)
+        self.temperature_label = tk.Label(self, text="Temperature: ", font=self.b_font_style)
+        self.pressure_label = tk.Label(self, text="Pressure: ",  font=self.b_font_style)
+        self.humidity_label = tk.Label(self, text="Humidity: ", font=self.b_font_style)
 
-        self.city_entry_sv = tk.StringVar()
-        self.city_entry_sv.set("Search city...")
-        self.city_entry = tk.Entry(self, textvariable=self.city_entry_sv, font=self.n_font_style, width=25)
-        self.city_entry.bind("<Button-1>", self.clear_city_entry)
+        self.location_entry_sv = tk.StringVar()
+        self.location_entry_sv.set("Search city...")
+        self.location_entry = tk.Entry(self, textvariable=self.location_entry_sv, font=self.n_font_style, width=25)
+        self.location_entry.bind("<Button-1>", self.clear_location_entry)
 
-        self.check_weather_button = tk.Button(self, text="Check weather", command=self.quit, font=self.n_font_style, relief="groove", bg="deepskyblue3",
-                                              width=25, cursor="hand2")
-        self.show_on_map_button = tk.Button(self, text="See location on the map", command=self.quit, font=self.n_font_style, relief="groove", bg="deepskyblue3",
-                                            width=25, cursor="hand2")
+        self.check_weather_button = tk.Button(self, text="Check weather", command=self.check_weather, font=self.n_font_style, relief="groove",
+                                              bg="steelblue3", width=25, cursor="hand2")
+        self.show_on_map_button = tk.Button(self, text="See location on the map", command=self.show_location_on_map, font=self.n_font_style,
+                                            relief="groove", bg="steelblue3", width=25, cursor="hand2")
 
-        self.city_label.pack(fill="x")
+        self.location_label.pack(fill="x")
         self.longitude_label.pack(fill="x")
         self.latitude_label.pack(fill="x")
         self.temperature_label.pack(fill="x")
         self.pressure_label.pack(fill="x")
         self.humidity_label.pack(fill="x")
-        self.city_entry.pack(pady=(10, 0))
+        self.location_entry.pack(pady=(10, 0))
         self.check_weather_button.pack(pady=(10, 0))
         self.show_on_map_button.pack(pady=(10, 0))
 
-    def clear_city_entry(self, event):
-        self.city_entry.delete(0, "end")
+    def clear_location_entry(self, event):
+        """
+        Clear the location entry widget when clicked.
+
+        Parameters:
+        - event (tk.Event): The event triggered by clicking on the location entry widget.
+        """
+
+        self.location_entry.delete(0, "end")
+
+    def get_configuration(self):
+        """
+        Retrieve and load configuration details from 'configuration.json'.
+        Reads the 'configuration.json' file and stores the configuration details in the 'configuration' attribute.
+        """
+        with open("configuration.json") as file:
+            self.configuration = json.load(file)
+
+    def check_weather(self):
+        """
+        Check the weather for the specified location and update displayed information in the Tkinter window.
+        Retrieves weather data for the specified location using the OpenWeather API and updates the GUI elements.
+        """
+        weather_data = self.get_weather_data()
+        if weather_data != {}:
+            self.location_label.config(text=f"Location: {weather_data['location']}")
+            self.longitude_label["text"] = f"Longitude: {weather_data['longitude']}"
+            self.latitude_label["text"] = f"Latitude: {weather_data['latitude']}"
+            self.temperature_label["text"] = f"Temperature: {weather_data['temperature']}"
+            self.pressure_label["text"] = f"Pressure: {weather_data['pressure']}"
+            self.humidity_label["text"] = f"Humidity: {weather_data['humidity']}"
+            self.location_entry_sv.set("Search for...")
+            self.location_entry.icursor(13)
+        else:
+            messagebox.showwarning("Error", "Enter a valid location first!")
+
+    def get_weather_data(self):
+        """
+        Retrieve weather data for the specified location from the OpenWeather API.
+
+        Returns:
+        - weather_data (dict): A dictionary containing weather information, or an empty dictionary if an error occurs.
+        """
+        response = requests.get(self.api_url.format(location_name=self.location_entry_sv.get(), api_key=self.configuration["api_key"]))
+        data = response.json()
+        if response.status_code == 200:
+            weather_data = {
+                "location": self.location_entry_sv.get().title(),
+                "longitude": data["coord"]["lon"],
+                "latitude": data["coord"]["lat"],
+                "temperature": str(data["main"]["temp"]) + " " + u"\N{DEGREE SIGN}" + "C",
+                "pressure": str(data["main"]["pressure"]) + "hPa",
+                "humidity": str(data["main"]["humidity"]) + "%"
+            }
+        else:
+            weather_data = {}
+
+        return weather_data
+
+    def show_location_on_map(self):
+        """
+        Display the specified location on a map using Folium and open it in the default web browser.
+        Uses Folium to generate an HTML map with a marker for the specified location and opens it in the default web browser.
+        """
+        longitude = self.longitude_label["text"].split(" ")[1]
+        latitude = self.latitude_label["text"].split(" ")[1]
+        if longitude != "" or latitude != "":
+            map = folium.Map(location=[latitude, longitude], zoom_start=13)
+            marker_text = "<font face='Bahnschrift'>Weather forecast location</font>"
+            iframe = folium.IFrame(marker_text, width=220, height=35)
+            popup = folium.Popup(iframe, min_width=220, max_width=220)
+            folium.Marker([latitude, longitude], popup=popup, icon=folium.Icon("blue")).add_to(map)
+            map.save("map.html")
+            map_html = "map.html"
+            webbrowser.open("file://" + os.path.realpath(map_html))
+        else:
+            messagebox.showwarning("Error", "Search for a location first!")
 
 
 if __name__ == "__main__":
     app = WeatherApp()
+    app.get_configuration()
     app.mainloop()
-# apiKey = '798ea5349c16c22a7abe55d8626bd50c'
-# apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}'
-# degree_sign = u"\N{DEGREE SIGN}"
-# font = 'Bahnschrift'
-# label_border = 5
-#
-# #clearing entry widget when pressed with left mouse button
-# def clearEntry(event):
-#     cityEntry.delete(0, 'end')
-#
-# #getting data from openweathermap api
-# def getData(city):
-#     try:
-#         api_request = requests.get(apiUrl.format(city, apiKey))
-#         api = json.loads(api_request.content)
-#         longitude = api['coord']['lon']
-#         latitude = api['coord']['lat']
-#         temperature = api['main']['temp']
-#         pressure = api['main']['pressure']
-#         humidity = api['main']['humidity']
-#         weather_data = [longitude, latitude, temperature, pressure, humidity]
-#         return weather_data
-#     except Exception as e:
-#         api = 'No data found'
-#         return api
-#
-# #getting city name from user and updating labels text based on recived data
-# def checkWeather():
-#     city = sv_cityEntry.get()
-#     weather = getData(city)
-#     if(weather != 'No data found'):
-#         cityLabel['text'] = 'Location: ' + city.title()
-#         longitudeLabel['text'] = 'Longitude: ' + str(weather[0])
-#         latitudeLabel['text'] = 'Latitude: ' + str(weather[1])
-#         temperatureLabel['text'] = 'Temperature: ' + str(weather[2]) + ' ' + degree_sign + 'C'
-#         pressureLabel['text'] = 'Pressure: ' + str(weather[3]) + ' hPa'
-#         humidityLabel['text'] = 'Humidity: ' + str(weather[4]) + ' %'
-#         sv_cityEntry.set('Search for...')
-#         cityEntry.icursor(13)
-#     else:
-#         messagebox.showwarning('Error', "Cannot find weather for this location!")
-#
-# #setting up application window
-# root = Tk()
-# root.title('Weather App')
-# root.iconbitmap('icon.ico')
-# root.geometry('400x320+800+200')
-# root.resizable(False, False)
-#
-# #label widgets
-# cityLabel = Label(root, text='Location: ', font=font, bd=label_border, bg='#3092d9')
-# longitudeLabel = Label(root, text='Longitude: ', font=font, bd=label_border)
-# latitudeLabel = Label(root, text='Latitude: ', font=font, bd=label_border)
-# temperatureLabel = Label(root, text='Temperature: ', font=font, bd=label_border)
-# pressureLabel = Label(root, text='Pressure: ',  font=font, bd=label_border)
-# humidityLabel = Label(root, text='Humidity: ', font=font, bd=label_border)
-#
-# #entry widget
-# sv_cityEntry = StringVar()
-# sv_cityEntry.set('Search for...')
-# cityEntry = Entry(root, textvariable=sv_cityEntry, font=font)
-# cityEntry.bind("<Button-1>", clearEntry)
-#
-# #buttons
-# searchButton = Button(root, text='Check weather', command=checkWeather, font=font, relief=GROOVE, width=20, bg='#3092d9')
-# mapButton = Button(root, text='See location on the map', command=lambda: showOnMap(longitudeLabel, latitudeLabel), font=font, relief=GROOVE, width=20, bg='#3092d9')
-#
-# #placing widgets in application window
-# cityLabel.pack(fill='x')
-# longitudeLabel.pack(fill='x')
-# latitudeLabel.pack(fill='x')
-# temperatureLabel.pack(fill='x')
-# pressureLabel.pack(fill='x')
-# humidityLabel.pack(fill='x')
-# cityEntry.pack(pady=3)
-# searchButton.pack(pady=5)
-# mapButton.pack(pady=5)
-#
-# root.mainloop()
