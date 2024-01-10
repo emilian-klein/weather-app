@@ -8,11 +8,12 @@ import os
 
 
 class WeatherApp(tk.Tk):
+    """
+    Application main class.
+    """
     def __init__(self):
         """
-        Initialize the WeatherApp Tkinter application.
-
-        Sets up the window properties, font styles, and initializes attributes.
+        Initialize the WeatherApp Tkinter application. Sets up the window properties, font styles and widgets.
         """
         super().__init__()
         self.title("Weather App")
@@ -53,17 +54,12 @@ class WeatherApp(tk.Tk):
 
     def clear_location_entry(self, event):
         """
-        Clear the location entry widget when clicked.
-
-        Parameters:
-        - event (tk.Event): The event triggered by clicking on the location entry widget.
+        Clears the location entry widget when clicked.
         """
-
         self.location_entry.delete(0, "end")
 
     def get_configuration(self):
         """
-        Retrieve and load configuration details from 'configuration.json'.
         Reads the 'configuration.json' file and stores the configuration details in the 'configuration' attribute.
         """
         with open("configuration.json") as file:
@@ -71,8 +67,7 @@ class WeatherApp(tk.Tk):
 
     def check_weather(self):
         """
-        Check the weather for the specified location and update displayed information in the Tkinter window.
-        Retrieves weather data for the specified location using the OpenWeather API and updates the GUI elements.
+        Updates the GUI elements with current weather data.
         """
         weather_data = self.get_weather_data()
         if weather_data != {}:
@@ -85,14 +80,11 @@ class WeatherApp(tk.Tk):
             self.location_entry_sv.set("Search for...")
             self.location_entry.icursor(13)
         else:
-            messagebox.showwarning("Error", "Enter a valid location first!")
+            messagebox.showwarning("Error", "Error occurred!\nEnter a valid location or check if your API key is active!")
 
     def get_weather_data(self):
         """
         Retrieve weather data for the specified location from the OpenWeather API.
-
-        Returns:
-        - weather_data (dict): A dictionary containing weather information, or an empty dictionary if an error occurs.
         """
         response = requests.get(self.api_url.format(location_name=self.location_entry_sv.get(), api_key=self.configuration["api_key"]))
         data = response.json()
@@ -113,7 +105,6 @@ class WeatherApp(tk.Tk):
     def show_location_on_map(self):
         """
         Display the specified location on a map using Folium and open it in the default web browser.
-        Uses Folium to generate an HTML map with a marker for the specified location and opens it in the default web browser.
         """
         longitude = self.longitude_label["text"].split(" ")[1]
         latitude = self.latitude_label["text"].split(" ")[1]
