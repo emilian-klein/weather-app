@@ -11,7 +11,6 @@ class WeatherApp(tk.Tk):
     """
     Application main class.
     """
-
     def __init__(self):
         """
         Initialize the WeatherApp Tkinter application. Sets up the window properties, font styles and widgets.
