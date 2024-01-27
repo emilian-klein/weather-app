@@ -1,16 +1,17 @@
 import tkinter as tk
-from tkinter import messagebox
 import requests
 import json
 import folium
 import webbrowser
 import os
+from tkinter import messagebox
 
 
 class WeatherApp(tk.Tk):
     """
     Application main class.
     """
+
     def __init__(self):
         """
         Initialize the WeatherApp Tkinter application. Sets up the window properties, font styles and widgets.
@@ -29,7 +30,7 @@ class WeatherApp(tk.Tk):
         self.longitude_label = tk.Label(self, text="Longitude: ", font=self.b_font_style)
         self.latitude_label = tk.Label(self, text="Latitude: ", font=self.b_font_style)
         self.temperature_label = tk.Label(self, text="Temperature: ", font=self.b_font_style)
-        self.pressure_label = tk.Label(self, text="Pressure: ",  font=self.b_font_style)
+        self.pressure_label = tk.Label(self, text="Pressure: ", font=self.b_font_style)
         self.humidity_label = tk.Label(self, text="Humidity: ", font=self.b_font_style)
 
         self.location_entry_sv = tk.StringVar()
@@ -37,7 +38,8 @@ class WeatherApp(tk.Tk):
         self.location_entry = tk.Entry(self, textvariable=self.location_entry_sv, font=self.n_font_style, width=25)
         self.location_entry.bind("<Button-1>", self.clear_location_entry)
 
-        self.check_weather_button = tk.Button(self, text="Check weather", command=self.check_weather, font=self.n_font_style, relief="groove",
+        self.check_weather_button = tk.Button(self, text="Check weather", command=self.check_weather, font=self.n_font_style,
+                                              relief="groove",
                                               bg="steelblue3", width=25, cursor="hand2")
         self.show_on_map_button = tk.Button(self, text="See location on the map", command=self.show_location_on_map, font=self.n_font_style,
                                             relief="groove", bg="steelblue3", width=25, cursor="hand2")

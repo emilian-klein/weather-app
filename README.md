@@ -13,7 +13,7 @@ The Weather App is a simple Tkinter application that allows users to check the w
 git clone https://github.com/emilian-klein/weather-app.git
 ```
 2. Go to project directory.
-3. Add your OpenWeather API key to the configuration.json file:
+3. Add your OpenWeather API key (https://openweathermap.org/api) to the configuration.json file:
 ```
 {
     "api_key": "your_openweather_api_key"
