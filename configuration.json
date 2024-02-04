@@ -1,3 +1,4 @@
 {
-  "api_key": "your_openweather_api_key"
+  "api_key": "",
+  "api_url": "https://api.openweathermap.org/data/2.5/weather?q={location_name}&units=metric&appid={api_key}"
 }

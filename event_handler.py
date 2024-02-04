@@ -1,15 +1,23 @@
+import json
 from tkinter import messagebox
-
+from settings_window import SettingsWindow
 
 class EventHandler:
-    def __init__(self, app):
-        self.app = app
+    def __init__(self, window):
+        self.window = window
+        self.configuration = None
 
     def enable_button(self, button):
-        self.app.button.configure(bg="#3195DC", state="normal", cursor="hand2")
+        """
+        Enables button by changing its state, color and cursor.
+        """
+        self.window.button.configure(bg="#3195DC", state="normal", cursor="hand2")
 
     def disable_button(self, button):
-        self.app.button.configure(bg="#787878", state="disabled", cursor="x_cursor")
+        """
+        Disables button by changing its state, color and cursor.
+        """
+        self.window.button.configure(bg="#787878", state="disabled", cursor="x_cursor")
 
     def clear_location_entry(self, event):
         """
@@ -18,19 +26,20 @@ class EventHandler:
         self.app.location_entry.delete(0, "end")
 
     def check_weather(self):
-        messagebox.showinfo("Info", "This is an example message.")
+        messagebox.showinfo("Info", "Check weather.")
 
     def show_on_map(self):
-        messagebox.showinfo("Info", "This is an example message.")
+        messagebox.showinfo("Info", "Show on map.")
 
     def open_settings(self):
-        messagebox.showinfo("Info", "This is an example message.")
-    # def get_configuration(self):
-    #     """
-    #     Reads the 'configuration.json' file and stores the configuration details in the 'configuration' attribute.
-    #     """
-    #     with open("configuration.json") as file:
-    #         self.configuration = json.load(file)
+        settings_window = SettingsWindow(self.app)
+
+    def get_configuration(self):
+        """
+        Reads the 'configuration.json' file and stores the configuration details in the 'configuration' attribute.
+        """
+        with open("configuration.json") as file:
+            self.configuration = json.load(file)
     #
     # def check_weather(self):
     #     """
