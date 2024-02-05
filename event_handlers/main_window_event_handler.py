@@ -1,29 +1,18 @@
-import json
 from tkinter import messagebox
-from settings_window import SettingsWindow
 
-class EventHandler:
+from windows.settings_window import SettingsWindow
+
+
+class MainWindowEventHandler:
     def __init__(self, window):
         self.window = window
         self.configuration = None
-
-    def enable_button(self, button):
-        """
-        Enables button by changing its state, color and cursor.
-        """
-        self.window.button.configure(bg="#3195DC", state="normal", cursor="hand2")
-
-    def disable_button(self, button):
-        """
-        Disables button by changing its state, color and cursor.
-        """
-        self.window.button.configure(bg="#787878", state="disabled", cursor="x_cursor")
 
     def clear_location_entry(self, event):
         """
         Clears the location entry widget when clicked.
         """
-        self.app.location_entry.delete(0, "end")
+        self.window.location_entry.delete(0, "end")
 
     def check_weather(self):
         messagebox.showinfo("Info", "Check weather.")
@@ -32,14 +21,29 @@ class EventHandler:
         messagebox.showinfo("Info", "Show on map.")
 
     def open_settings(self):
-        settings_window = SettingsWindow(self.app)
+        settings_window = SettingsWindow(self.window)
 
-    def get_configuration(self):
-        """
-        Reads the 'configuration.json' file and stores the configuration details in the 'configuration' attribute.
-        """
-        with open("configuration.json") as file:
-            self.configuration = json.load(file)
+    # def enable_button(self, button):
+    #     """
+    #     Enables button by changing its state, color and cursor.
+    #     """
+    #     button.configure(bg="#3195DC", state="normal", cursor="hand2")
+    #
+    # def disable_button(self, button):
+    #     """
+    #     Disables button by changing its state, color and cursor.
+    #     """
+    #     self.window.button.configure(bg="#787878", state="disabled", cursor="x_cursor")
+    #
+
+    #
+    #
+    # def get_configuration(self):
+    #     """
+    #     Reads the 'configuration.json' file and stores the configuration details in the 'configuration' attribute.
+    #     """
+    #     with open("../configuration.json") as file:
+    #         self.configuration = json.load(file)
     #
     # def check_weather(self):
     #     """

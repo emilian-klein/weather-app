@@ -1,15 +1,17 @@
 import tkinter as tk
 
+from event_handlers.settings_window_event_handler import SettingsWindowEventHandler
+
 
 class SettingsWindow(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
         self.title("Settings")
-        self.iconbitmap("images/main_icon.ico")
+        self.iconbitmap("images/icon.ico")
         self.geometry("400x100")
         self.resizable(False, False)
         self.font_style = ("Bahnschrift", "11", "normal")
-        self.event_handler =
+        self.event_handler = SettingsWindowEventHandler(self)
 
         self.top_frame = tk.Frame(self)
         self.top_frame.pack(fill="x", pady=10)
@@ -30,3 +32,5 @@ class SettingsWindow(tk.Toplevel):
 
         self.close_button = tk.Button(self, text="Close", command=self.destroy, font=self.font_style, width=15, relief="groove", bg="#787878", cursor="hand2")
         self.close_button.pack(side="right", padx=(0, 60))
+        self.grab_set()
+        self.wait_window(self)

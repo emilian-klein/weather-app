@@ -1,11 +1,6 @@
-import requests
-import json
-import folium
-import webbrowser
-import os
 import tkinter as tk
-from tkinter import messagebox
-from event_handler import EventHandler
+
+from event_handlers.main_window_event_handler import MainWindowEventHandler
 
 
 class MainWindow(tk.Tk):
@@ -18,12 +13,11 @@ class MainWindow(tk.Tk):
         """
         super().__init__()
         self.title("Weather App")
-        self.iconbitmap("images/main_icon.ico")
+        self.iconbitmap("images/icon.ico")
         self.geometry("400x310")
         self.resizable(False, False)
         self.font_style = ("Bahnschrift", "11", "normal")
-        self.configuration = None
-        self.event_handler = EventHandler(self)
+        self.event_handler = MainWindowEventHandler(self)
 
         self.location_label = tk.Label(self, text="Location: ", font=self.font_style, bg="#2884C6")
         self.location_label.pack(fill="x")
