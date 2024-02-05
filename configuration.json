@@ -1,4 +1,4 @@
 {
-  "api_key": "db71f77edc44a53a8f8022d088934450",
-  "api_url": "https://api.openweathermap.org/data/2.5/weather?q={location_name}&units=metric&appid={api_key}"
+    "api_key": "",
+    "api_url": "https://api.openweathermap.org/data/2.5/weather"
 }

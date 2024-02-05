@@ -20,17 +20,18 @@ class SettingsWindow(tk.Toplevel):
         self.api_key_label.pack(side="left", padx=5)
 
         self.api_key_sv = tk.StringVar()
-        self.api_key_sv.set("")
+        self.api_key_sv.set(self.event_handler.set_api_key_sv())
         self.api_key_entry = tk.Entry(self.top_frame, textvariable=self.api_key_sv, font=self.font_style, width=38)
         self.api_key_entry.pack(side="left", padx=5)
 
         self.bottom_frame = tk.Frame(self)
         self.bottom_frame.pack()
 
-        self.save_button = tk.Button(self, text="Save", command=self.destroy, font=self.font_style, width=15, relief="groove", bg="#2884C6", cursor="hand2")
-        self.save_button.pack(side="left", padx=(60, 0))
+        self.save_api_key_button = tk.Button(self, text="Save", command=self.event_handler.save_api_key, font=self.font_style, width=15, relief="groove", bg="#2884C6", cursor="hand2")
+        self.save_api_key_button.pack(side="left", padx=(60, 0))
 
-        self.close_button = tk.Button(self, text="Close", command=self.destroy, font=self.font_style, width=15, relief="groove", bg="#787878", cursor="hand2")
-        self.close_button.pack(side="right", padx=(0, 60))
+        self.close_settings_button = tk.Button(self, text="Close", command=self.event_handler.close_settings, font=self.font_style, width=15, relief="groove", bg="#787878", cursor="hand2")
+        self.close_settings_button.pack(side="right", padx=(0, 60))
+
         self.grab_set()
         self.wait_window(self)
