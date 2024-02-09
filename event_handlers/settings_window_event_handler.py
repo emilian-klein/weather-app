@@ -1,33 +1,44 @@
 import json
 from tkinter import messagebox
 
+from event_handlers.event_handler import EventHandler
 
-class SettingsWindowEventHandler:
-    def __init__(self, window):
-        self.window = window
-        self.configuration = None
 
-    def get_configuration(self):
-        with open("configuration.json") as file:
-            self.configuration = json.load(file)
+class SettingsWindowEventHandler(EventHandler):
+    """Class responsible for handling events in which happens in settings window."""
 
     def set_api_key_sv(self):
+        """Returns api_key value saved in configuration to paste it into entry widget."""
         self.get_configuration()
-        return self.configuration.get("api_key", "")
+        return self.configuration.get("api_key")
+
+    def set_units_sv(self):
+        """Returns units value saved in configuration to make a selection of proper radiobutton widget."""
+        self.get_configuration()
+        return self.configuration.get("units")
 
     def save_api_key(self):
-        new_api_key = self.get_new_api_key()
+        """Updates api_key value in configuration with value fetch from enter widget."""
+        new_api_key = self.get_api_key()
+        new_units = self.get_units()
         self.configuration["api_key"] = new_api_key
+        self.configuration["units"] = new_units
         self.update_configuration()
-        messagebox.showinfo("Information", "API key saved!")
-        self.close_settings()
+        messagebox.showinfo("Information", "Settings saved!")
 
-    def get_new_api_key(self):
+    def get_api_key(self):
+        """Reads what is currently presented in 'API Key' entry field."""
         return str(self.window.api_key_sv.get())
 
+    def get_units(self):
+        """Reads what is currently selected in 'Units' submenu."""
+        return str(self.window.units_sv.get())
+
     def update_configuration(self):
+        """Saves current configuration to file."""
         with open("configuration.json", "w") as file:
             json.dump(self.configuration, file, indent=4)
 
     def close_settings(self):
+        """Closes window."""
         self.window.destroy()

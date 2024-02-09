@@ -1,4 +1,26 @@
 {
     "api_key": "",
-    "api_url": "https://api.openweathermap.org/data/2.5/weather"
+    "api_url": "https://api.openweathermap.org/data/2.5/weather",
+    "default_location": "Gdynia",
+    "units": "standard",
+    "units_mapping": {
+        "standard": {
+            "temperature": "K",
+            "pressure": "hPa",
+            "humidity": "%",
+            "wind": "meter/sec"
+        },
+        "metric": {
+            "temperature": "C",
+            "pressure": "hPa",
+            "humidity": "%",
+            "wind": "meter/sec"
+        },
+        "imperial": {
+            "temperature": "F",
+            "pressure": "hPa",
+            "humidity": "%",
+            "wind": "miles/hour"
+        }
+    }
 }

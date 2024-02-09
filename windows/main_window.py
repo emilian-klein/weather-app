@@ -1,40 +1,47 @@
 import tkinter as tk
 
+from PIL import Image, ImageTk
+
 from event_handlers.main_window_event_handler import MainWindowEventHandler
 
 
 class MainWindow(tk.Tk):
-    """
-    Application main window.
-    """
+    """Application main window."""
+
     def __init__(self):
-        """
-        Initializes main window. Sets up the properties, font styles and widgets.
-        """
+        """Initializes main window. Sets up the properties, font styles and widgets."""
         super().__init__()
         self.title("Weather App")
         self.iconbitmap("images/icon.ico")
-        self.geometry("400x310")
+        self.geometry("400x395")
         self.resizable(False, False)
         self.font_style = ("Bahnschrift", "11", "normal")
         self.event_handler = MainWindowEventHandler(self)
+        self.configure(bg="#d1d1d1")
 
         self.location_label = tk.Label(self, text="Location: ", font=self.font_style, bg="#2884C6")
         self.location_label.pack(fill="x")
 
-        self.temperature_label = tk.Label(self, text="Temperature: ", font=self.font_style)
+        self.photo = ImageTk.PhotoImage(Image.open(f"images/icon.ico"))
+        self.weather_icon = tk.Label(self, bg="#d1d1d1", image=self.photo)
+        self.weather_icon.pack(pady=5)
+
+        self.temperature_label = tk.Label(self, text="Temperature: ", font=self.font_style, bg="#d1d1d1")
         self.temperature_label.pack()
 
-        self.pressure_label = tk.Label(self, text="Pressure: ", font=self.font_style)
+        self.pressure_label = tk.Label(self, text="Pressure: ", font=self.font_style, bg="#d1d1d1")
         self.pressure_label.pack()
 
-        self.humidity_label = tk.Label(self, text="Humidity: ", font=self.font_style)
+        self.humidity_label = tk.Label(self, text="Humidity: ", font=self.font_style, bg="#d1d1d1")
         self.humidity_label.pack()
 
-        self.longitude_label = tk.Label(self, text="Longitude: ", font=self.font_style)
+        self.wind_label = tk.Label(self, text="Wind: ", font=self.font_style, bg="#d1d1d1")
+        self.wind_label.pack()
+
+        self.longitude_label = tk.Label(self, text="Longitude: ", font=self.font_style, bg="#d1d1d1")
         self.longitude_label.pack()
 
-        self.latitude_label = tk.Label(self, text="Latitude: ", font=self.font_style)
+        self.latitude_label = tk.Label(self, text="Latitude: ", font=self.font_style, bg="#d1d1d1")
         self.latitude_label.pack()
 
         self.location_sv = tk.StringVar()
@@ -54,3 +61,5 @@ class MainWindow(tk.Tk):
         self.settings_button = tk.Button(self, text="Settings", command=self.event_handler.open_settings, font=self.font_style,
                                          relief="groove", bg="#2884C6", width=25, cursor="hand2")
         self.settings_button.pack(pady=(10, 0))
+
+        self.bind('<Return>', self.event_handler.check_weather)
