@@ -5,34 +5,19 @@ from event_handlers.event_handler import EventHandler
 
 
 class SettingsWindowEventHandler(EventHandler):
-    """Class responsible for handling events in which happens in settings window."""
+    """Class responsible for handling events which happens in settings window."""
 
-    def set_api_key_sv(self):
-        """Returns api_key value saved in configuration to paste it into entry widget."""
+    def save_settings(self):
+        """Updates settings with data provided by user."""
         self.get_configuration()
-        return self.configuration.get("api_key")
-
-    def set_units_sv(self):
-        """Returns units value saved in configuration to make a selection of proper radiobutton widget."""
-        self.get_configuration()
-        return self.configuration.get("units")
-
-    def save_api_key(self):
-        """Updates api_key value in configuration with value fetch from enter widget."""
-        new_api_key = self.get_api_key()
-        new_units = self.get_units()
+        new_api_key = self.get_sv_value(self.window.api_key_sv)
+        new_units = self.get_sv_value(self.window.units_sv)
+        new_default_location = self.get_sv_value(self.window.default_location_sv)
         self.configuration["api_key"] = new_api_key
         self.configuration["units"] = new_units
+        self.configuration["default_location"] = new_default_location
         self.update_configuration()
         messagebox.showinfo("Information", "Settings saved!")
-
-    def get_api_key(self):
-        """Reads what is currently presented in 'API Key' entry field."""
-        return str(self.window.api_key_sv.get())
-
-    def get_units(self):
-        """Reads what is currently selected in 'Units' submenu."""
-        return str(self.window.units_sv.get())
 
     def update_configuration(self):
         """Saves current configuration to file."""
