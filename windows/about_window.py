@@ -1,13 +1,9 @@
 import tkinter as tk
-
 from PIL import ImageTk, Image
 
 
 class AboutWindow(tk.Toplevel):
-    """About window."""
-
     def __init__(self, parent):
-        """Initializes about window. Sets up its properties, font styles and widgets."""
         super().__init__(parent)
         self.title("About")
         self.iconbitmap("images/app_icon.ico")

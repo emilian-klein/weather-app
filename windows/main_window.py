@@ -5,10 +5,7 @@ from event_handlers.main_window_event_handler import MainWindowEventHandler
 
 
 class MainWindow(tk.Tk):
-    """Application main window."""
-
     def __init__(self):
-        """Initializes main window. Sets up the properties, font styles and widgets."""
         super().__init__()
         self.title("WeatherApp")
         self.iconbitmap("images/app_icon.ico")

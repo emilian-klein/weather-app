@@ -4,10 +4,7 @@ from event_handlers.settings_window_event_handler import SettingsWindowEventHand
 
 
 class SettingsWindow(tk.Toplevel):
-    """Settings window."""
-
     def __init__(self, parent):
-        """Initializes settings window. Sets up its properties, font styles and widgets."""
         super().__init__(parent)
         self.title("Settings")
         self.iconbitmap("images/app_icon.ico")
@@ -64,6 +61,7 @@ class SettingsWindow(tk.Toplevel):
         self.save_settings_button = tk.Button(self, text="Save", command=self.event_handler.save_settings, font=self.b_font_style, width=15, relief="groove",
                                               bg="#398ccc", cursor="hand2")
         self.save_settings_button.pack(side="left", padx=(60, 0))
+        self.bind("<Return>", self.event_handler.save_settings)
 
         self.close_settings_button = tk.Button(self, text="Close", command=self.event_handler.close_settings, font=self.b_font_style, width=15, relief="groove",
                                                bg="#787878", cursor="hand2")
