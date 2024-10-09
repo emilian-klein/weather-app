@@ -8,6 +8,11 @@ Weather data is fetched from OpenWeather API.
     <img src="images/screenshots/app2.png">
 </p>
 
+### Required Python version
+```
+>=3.8.0
+```
+
 ### Setup
 1. Clone this repository or download ZIP file:
 ```
